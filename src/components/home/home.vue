@@ -1,6 +1,13 @@
 <template>
     <div class="home">
-        Home
+        <div>Home</div><div>Home</div><div>Home</div><div>Home</div>
+        <div>Home</div><div>Home</div><div>Home</div><div>Home</div>
+        <div>Home</div><div>Home</div><div>Home</div><div>Home</div>
+        <div>Home</div><div>Home</div><div>Home</div><div>Home</div>
+        <div>Home</div>
+        <div>Home</div><div>Home</div><div>Home</div><div>Home</div>
+        <div>Home</div><div>Home</div><div>Home</div><div>Home</div>
+        <div>Home</div><div>Home</div><div>Home</div>
     </div>
 </template>
 
