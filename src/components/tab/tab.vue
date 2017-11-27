@@ -31,10 +31,8 @@
         position: fixed;
         bottom: 0;
         display: flex;
-        // padding: 10px;
-        font-size: @font-size-small;
+        font-size: @font-size-medium;
         background: @color-background;
-        // line-height: 90px;
         .tab-item {
             text-align: center;
             flex: 1;
