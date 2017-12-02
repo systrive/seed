@@ -5,6 +5,7 @@ const Home = () => import('components/home/home')
 const Classify = () => import('components/classify/classify')
 const Cart = () => import('components/cart/cart')
 const User = () => import('components/user/user')
+const Detail = () => import('components/detail/detail')
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
             path: '/user',
             name: 'User',
             component: User
+        },
+        {
+            path: '/detail',
+            name: 'Detail',
+            component: Detail
         }
     ]
 })

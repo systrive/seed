@@ -1,19 +1,19 @@
 <template>
     <div class="tab">
         <router-link tag="div" class="tab-item" to="/">
-            <i class="tab-img home"></i>
+            <i class="tab-img tab-home"></i>
             <span class="tab-link">首页</span>
         </router-link>
         <router-link tag="div" class="tab-item" to="/classify">
-            <i class="tab-img classify"></i>
+            <i class="tab-img tab-classify"></i>
             <span class="tab-link">分类</span>
         </router-link>
         <router-link tag="div" class="tab-item" to="/cart">
-            <i class="tab-img cart"></i>
+            <i class="tab-img tab-cart"></i>
             <span class="tab-link">购物车</span>
         </router-link>
         <router-link tag="div" class="tab-item" to="/user">
-            <i class="tab-img user"></i>
+            <i class="tab-img tab-user"></i>
             <span class="tab-link">我的</span>
         </router-link>
     </div>
@@ -47,32 +47,32 @@
                 background-repeat: no-repeat;
                 background-size: @image-size-icon @image-size-icon;
                 background-position: left 50% bottom 0px;
-                &.home {
+                &.tab-home {
                 background-image: url('./resource/home.png');
                 }
-                &.classify {
+                &.tab-classify {
                     background-image: url('./resource/classify.png');
                 }
-                &.cart {
+                &.tab-cart {
                     background-image: url('./resource/cart.png');
                 }
-                &.user {
+                &.tab-user {
                     background-image: url('./resource/user.png');
                 }
             }
             &.router-link-exact-active {
                 color: @color-theme;
                 .tab-img {
-                    &.home {
+                    &.tab-home {
                         background-image: url('./resource/home-select.png');
                     }
-                    &.classify {
+                    &.tab-classify {
                         background-image: url('./resource/classify-select.png');
                     }
-                    &.cart {
+                    &.tab-cart {
                         background-image: url('./resource/cart-select.png');
                     }
-                    &.user {
+                    &.tab-user {
                         background-image: url('./resource/user-select.png');
                     }
                 }

@@ -27,6 +27,7 @@ module.exports = {
       'base': resolve('src/base'),
       'common': resolve('src/common'),
       'components': resolve('src/components'),
+      'data': resolve('src/data'),
       'cube-ui': 'cube-ui/lib'
     }
   },
