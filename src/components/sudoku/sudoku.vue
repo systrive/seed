@@ -9,7 +9,7 @@
                 <span
                     :class="[focusMatrix[rowsIndex ][colIndex] ? 'focus-cell': '',
                         relatedMatrix[rowsIndex ][colIndex] ? 'related-cell': '',
-                        errorMatrix[rowsIndex][colIndex] && !orignMatrix[rowsIndex][colIndex] ? 'error-cell': '',
+                        errorMatrix[rowsIndex][colIndex] ? 'error-cell': '',
                         newNumMatrix[rowsIndex][colIndex] ? 'fill-cell': '',
                         colGroupClass[colIndex % 3]]"
                     ref="gridCell"
@@ -66,10 +66,14 @@ export default {
             focusAxis: [],
             errorMatrix: [],
             relatedMatrix: [],
-            newNumMatrix: []
+            newNumMatrix: [],
+            sameCellMatrix: []
         }
     },
-    watch: {},
+    watch: {
+        errorMatrix () {
+        }
+    },
     mounted () {
         this._initMatrix()
         this.gradePicker = this.$createPicker({
@@ -96,6 +100,7 @@ export default {
             if (this.focusAxis && this.focusAxis.length === 2) {
                 this.matrix[this.focusAxis[0]][this.focusAxis[1]] = '.'
                 this.matrix = deepCopy(this.matrix)
+                this._reSetErrorMatrix()
             }
         },
         makeMatrix (grade = 'easy') {
@@ -152,20 +157,28 @@ export default {
                 this.matrix[this.focusAxis[0]][this.focusAxis[1]] = num
                 this.matrix = deepCopy(this.matrix)
                 this.newNumMatrix[this.focusAxis[0]][this.focusAxis[1]] = num
+                console.log(this.checkNum(num))
+                if (this.checkNum(num)) {
+                    alert('success')
+                }
             }
         },
         checkNum (num) {
             // 检查是否符合标准
             let rowIndex = this.focusAxis[0]
             let colIndex = this.focusAxis[1]
+            let checkPos = false
+            this._reSetErrorMatrix()
+            this.errorMatrix[rowIndex][colIndex] = 0
             for (let i = 0; i < 9; i++) {
                 if (i !== colIndex && this.matrix[rowIndex][i] === num) {
                     this.errorMatrix[rowIndex][i] = 1
                     this.errorMatrix[rowIndex][colIndex] = 1
-                }
-                if (i !== rowIndex && this.matrix[i][colIndex] === num) {
+                    checkPos = true
+                } else if (i !== rowIndex && this.matrix[i][colIndex] === num) {
                     this.errorMatrix[i][colIndex] = 1
                     this.errorMatrix[rowIndex][colIndex] = 1
+                    checkPos = true
                 }
             }
             let rowStart = Math.floor(rowIndex / 3)
@@ -174,18 +187,31 @@ export default {
                 for (let n = 0; n < 3; n++) {
                     if (rowStart * 3 + m !== rowIndex && colStart * 3 + n !== colIndex && this.matrix[rowStart * 3 + m][colStart * 3 + n] === num) {
                         this.errorMatrix[rowStart * 3 + m][colStart * 3 + n] = 1
+                        checkPos = true
                     }
                 }
             }
-            // console.log(this.errorMatrix)
-            // for (let i = 0; i < 9; i++) {
-            //     for (let j = 0; j < 9; j++) {
-            //         if (this.errorMatrix[i][j]) {
-            //             return true
-            //         }
-            //     }
-            // }
-            // return false
+            this.errorMatrix[rowIndex][colIndex] = checkPos ? 1 : 0
+            let result = true
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if (this.matrix[i][j] === '.' || (this.errorMatrix[i][j] && this.orignMatrix[i][j] === '.')) {
+                        result = false
+                    }
+                }
+            }
+            return result
+        },
+        _reSetErrorMatrix () {
+            let errorMatrix = Array.from({length: 9}, () => this.makeRow(0))
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if (!this.orignMatrix[i][j]) {
+                        errorMatrix[i][j] = 0
+                    }
+                }
+            }
+            this.errorMatrix = errorMatrix
         },
         _initMatrix (grade = 'easy') {
             // 初始化
@@ -197,6 +223,8 @@ export default {
             this.relatedMatrix = Array.from({length: 9}, () => this.makeRow(0))
             // 新添加的值
             this.newNumMatrix = Array.from({length: 9}, () => this.makeRow(0))
+            // 检查目前相同的值
+            this.sameCellMatrix = Array.from({length: 9}, () => this.makeRow(0))
             this.makeMatrix(grade)
         }
     }
