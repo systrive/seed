@@ -6,6 +6,7 @@ const Classify = () => import('components/classify/classify')
 const Cart = () => import('components/cart/cart')
 const User = () => import('components/user/user')
 const Detail = () => import('components/detail/detail')
+const Sudoku = () => import('components/sudoku/sudoku')
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
             path: '/detail',
             name: 'Detail',
             component: Detail
+        },
+        {
+            path: '/sudoku',
+            name: 'Sudoku',
+            component: Sudoku
         }
     ]
 })

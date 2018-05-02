@@ -59,7 +59,6 @@
             this.selectTop = selectTop
             this.selectBottom = selectBottom
             this.newest = newest
-            console.log(this.newest)
         },
         methods: {
             selectItem (item, index) {
@@ -84,9 +83,6 @@
     @import '../../common/less/variable';
 
     .home {
-        // .cube-slide-dots {
-        //     top: 300px;
-        // }
         position: fixed;
         top: 0;
         bottom: 112px;
@@ -142,6 +138,7 @@
                     overflow: hidden;
                     .name, .desc, .price {
                         .no-wrapper();
+                        -webkit-line-clamp: 2;
                     }
                     .name {
                         margin-bottom: 20px;
