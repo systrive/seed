@@ -5,15 +5,16 @@
         </div>
         <!-- 九宫格 -->
         <div ref="gridContainer" id="container" class="container grid">
-            <div class="row" :class="rowGroupClass[rowsIndex % 3]" v-for="(rows, rowsIndex) in matrix" :key="rowsIndex">
+            <div class="row" :class="rowGroupClass[rowIndex % 3]" v-for="(rows, rowIndex) in matrix" :key="rowIndex">
                 <span
-                    :class="[focusMatrix[rowsIndex ][colIndex] ? 'focus-cell': '',
-                        relatedMatrix[rowsIndex ][colIndex] ? 'related-cell': '',
-                        errorMatrix[rowsIndex][colIndex] ? 'error-cell': '',
-                        newNumMatrix[rowsIndex][colIndex] ? 'fill-cell': '',
+                    :class="[focusMatrix[rowIndex ][colIndex] ? 'focus-cell': '',
+                        relatedMatrix[rowIndex ][colIndex] ? 'related-cell': '',
+                        errorMatrix[rowIndex][colIndex] ? 'error-cell': '',
+                        newNumMatrix[rowIndex][colIndex] ? 'fill-cell': '',
+                        sameCellMatrix[rowIndex][colIndex] ? 'same-cell' : '',
                         colGroupClass[colIndex % 3]]"
                     ref="gridCell"
-                    @click="focusCell(rowsIndex, colIndex)"
+                    @click="focusCell(rowIndex, colIndex)"
                     v-for="(cell, colIndex) in rows" :key="colIndex"
                 >{{ cell !== '.' ? cell : '&nbsp;' }}</span>
             </div>
@@ -124,6 +125,10 @@ export default {
             this._setFocusMatrix(rowIndex, colIndex)
             // 关联矩阵
             this._setRelatedMatrix(rowIndex, colIndex)
+            // 相同数字矩阵
+            if (this.matrix[rowIndex][colIndex] !== '.') {
+                this._setSameCellMatrix(this.matrix[rowIndex][colIndex])
+            }
         },
         _setRelatedMatrix (rowIndex, colIndex) {
             // 设置关联矩阵
@@ -159,7 +164,8 @@ export default {
                 this.matrix[this.focusAxis[0]][this.focusAxis[1]] = num
                 this.matrix = deepCopy(this.matrix)
                 this.newNumMatrix[this.focusAxis[0]][this.focusAxis[1]] = num
-                console.log(this.checkNum(num))
+                this._setSameCellMatrix(num)
+                console.log(this.relatedMatrix)
                 if (this.checkNum(num)) {
                     alert('success')
                 }
@@ -170,7 +176,7 @@ export default {
             let rowIndex = this.focusAxis[0]
             let colIndex = this.focusAxis[1]
             let checkPos = false
-            this._reSetErrorMatrix()
+            this._setErrorMatrix()
             this.errorMatrix[rowIndex][colIndex] = 0
             for (let i = 0; i < 9; i++) {
                 if (i !== colIndex && this.matrix[rowIndex][i] === num) {
@@ -205,15 +211,30 @@ export default {
             return result
         },
         _reSetErrorMatrix () {
+            // 重置
+            let errorMatrix = Array.from({length: 9}, () => this.makeRow(0))
+            this.errorMatrix = errorMatrix
+        },
+        _setErrorMatrix () {
+            // 去掉 originMatrix 本来有值的错误展示
             let errorMatrix = Array.from({length: 9}, () => this.makeRow(0))
             for (let i = 0; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
-                    if (!this.orignMatrix[i][j]) {
-                        errorMatrix[i][j] = 0
+                    if (this.orignMatrix[i][j] === '.') {
+                        errorMatrix[i][j] = this.errorMatrix[i][j]
                     }
                 }
             }
             this.errorMatrix = errorMatrix
+        },
+        _setSameCellMatrix (num) {
+            let sameCellMatrix = Array.from({length: 9}, () => this.makeRow(0))
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    sameCellMatrix[i][j] = this.matrix[i][j] === num ? 1 : 0
+                }
+            }
+            this.sameCellMatrix = sameCellMatrix
         },
         _initMatrix () {
             // 初始化
@@ -235,7 +256,7 @@ export default {
 
 <style scoped lang="less">
     @import '../../common/less/variable';
-    @import '../../common/less/cube-ui.less';
+
     .sudoku {
         position: fixed;
         z-index: 100;
@@ -287,6 +308,9 @@ export default {
                 }
                 &.error-cell {
                     color: @color-sub-theme;
+                }
+                &.same-cell {
+                    background-color: #bbb;
                 }
 
                 &:first-child {
