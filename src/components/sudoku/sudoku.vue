@@ -31,7 +31,7 @@
                 <button type="button" id="check" @click="gradepicker">{{ gradeSelectedText }}</button>
                 <button type="button" id="reset" @click="reset">重置</button>
                 <button type="button" id="clear" @click="clear">清理</button>
-                <button type="button" id="restart" @click="makeMatrix">重建</button>
+                <button type="button" id="restart" @click="_initMatrix">重建</button>
             </div>
         </div>
     </div>
@@ -62,6 +62,7 @@ export default {
                 { text: '疯狂', value: 'insane' },
                 { text: '非人类', value: 'inhuman' }
             ],
+            selectedGrade: 'easy',
             gradeSelectedText: '入门',
             focusAxis: [],
             errorMatrix: [],
@@ -79,9 +80,10 @@ export default {
         this.gradePicker = this.$createPicker({
             title: '游戏等级',
             data: [this.grade],
-            onSelect: (selectedText, selectedIndex) => {
+            onSelect: (selectedGrade, selectedIndex) => {
                 this.gradeSelectedText = this.grade[selectedIndex].text
-                this._initMatrix()
+                this.selectedGrade = selectedGrade[0]
+                this._initMatrix(this.selectedGrade)
             },
             onCancel: () => {}
         })
@@ -103,9 +105,9 @@ export default {
                 this._reSetErrorMatrix()
             }
         },
-        makeMatrix (grade = 'easy') {
+        makeMatrix () {
             // 制作数独数组
-            let sudoku = this.sudoku.generate(grade)
+            let sudoku = this.sudoku.generate(this.selectedGrade)
             let matrix = this.sudoku.board_string_to_grid(sudoku)
             this.matrix = matrix
             this.orignMatrix = deepCopy(matrix)
@@ -213,7 +215,7 @@ export default {
             }
             this.errorMatrix = errorMatrix
         },
-        _initMatrix (grade = 'easy') {
+        _initMatrix () {
             // 初始化
             // focus 矩阵
             this.focusMatrix = Array.from({length: 9}, () => this.makeRow(0))
@@ -225,7 +227,7 @@ export default {
             this.newNumMatrix = Array.from({length: 9}, () => this.makeRow(0))
             // 检查目前相同的值
             this.sameCellMatrix = Array.from({length: 9}, () => this.makeRow(0))
-            this.makeMatrix(grade)
+            this.makeMatrix(this.selectedGrade)
         }
     }
 }
