@@ -165,7 +165,6 @@ export default {
                 this.matrix = deepCopy(this.matrix)
                 this.newNumMatrix[this.focusAxis[0]][this.focusAxis[1]] = num
                 this._setSameCellMatrix(num)
-                console.log(this.relatedMatrix)
                 if (this.checkNum(num)) {
                     alert('success')
                 }
