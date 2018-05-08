@@ -1,14 +1,20 @@
-const http = require('http');
+const Koa = require('koa')
+const path = require('path')
+const static = require('koa-static')
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const app = new Koa()
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
-});
+// 静态资源目录对于相对入口文件index.js的路径
+const staticPath = './dist'
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.use(static(
+  path.join( __dirname,  staticPath)
+))
+
+app.use( async ( ctx ) => {
+  ctx.body = 'hello world'
+})
+
+app.listen(3000, () => {
+  console.log('[demo] static-use-middleware is starting at port 8080')
+})

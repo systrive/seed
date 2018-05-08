@@ -14,6 +14,8 @@
   "dependencies": {
     "cube-ui": "^1.0.2",
     "fastclick": "^1.0.6",
+    "koa": "^2.5.1",
+    "koa-static": "^4.0.2",
     "vue": "^2.5.2",
     "vue-lazyload": "^1.1.4",
     "vue-router": "^3.0.1"
